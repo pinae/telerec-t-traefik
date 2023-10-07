@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  traefik:
+    image: "traefik"
+    container_name: {{ service_cfg.name }}
+    restart: always
+    healthcheck:
+      test: "traefik healthcheck"
+    ports:
+      - "80:80"
+      - "443:443"
+{% if service_cfg.cockpit.enabled == true %}
+      - "8080:8080"
+{% endif %}
+    environment:
+      PUID: "{{ PUID }}"
+      PGID: "{{ PGID }}"
+      TZ: "{{ timezone }}"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:rw"
+      - "{{ service_cfg.directory }}/traefik.yml:/etc/traefik/traefik.yml:ro"
+      - "{{ service_cfg.directory }}/rules:/etc/traefik/dynamic"
+      - "{{ service_cfg.directory }}/acme.json:/etc/traefik/acme/acme.json:rw"
+{#      - "{{ service_cfg.directory }}/logs:/logs"#}
+    labels:
+      << : *base_labels
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+networks:
+  traefik_net:
+    external:
+      name: traefik_default
