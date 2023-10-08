@@ -23,8 +23,4 @@ services:
       << : *base_labels
     extra_hosts:
       - "host.docker.internal:host-gateway"
-
-networks:
-  traefik_net:
-    external:
-      name: traefik_default
+    networks: *base_networks

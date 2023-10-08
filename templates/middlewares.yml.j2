@@ -40,7 +40,7 @@ http:
     internal-ips-only:
       ipWhiteList:
         sourceRange:
-          {% for range in internal_ip_ranges  %}
+          {% for range in service_cfg.internal_ip_ranges %}
           - "{{ range }}"
           {% endfor %}
 {% endif %}
