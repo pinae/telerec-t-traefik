@@ -52,21 +52,3 @@ http:
       rateLimit:
         average: 100
         burst: 50
-
-{% if service_cfg.authelia.enabled == true %}
-    middlewares-authelia:
-      forwardAuth:
-        address: "http://authelia:9091/api/verify?rd=https://{{ service_cfg.authelia.domain }}"
-        trustForwardHeader: true
-        authResponseHeaders:
-          - "Remote-User"
-          - "Remote-Groups"
-
-    chain-authelia:
-      chain:
-        middlewares:
-          - middlewares-rate-limit
-          - hsts-header
-          - middlewares-authelia
-          - middlewares-compress
-{% endif %}

@@ -12,12 +12,6 @@
       watchtower: true
       autoheal: true
       internal_ip_ranges: []
-      cockpit:
-        enabled: false
-        domain: "cockpit.example.com"
-      authelia:
-        enabled: false
-        domain: "auth.example.com"
       skip_network_definition: true
       subdirs: []
 
@@ -43,14 +37,6 @@
   with_items:
     - tls-options.yml
     - https-redirect-all.yml
-
-- name: Copy rules/app-cockpit.yml
-  template:
-    src: app-cockpit.yml.j2
-    dest: '{{ service_dir }}/rules/app-cockpit.yml'
-    owner: '{{ admin.name }}'
-    group: 'docker'
-  tags: [ started, restarted, recreated ]
 
 - name: Copy rules/middlewares.yml
   template:
