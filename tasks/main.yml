@@ -13,7 +13,7 @@
       autoheal: true
       internal_ip_ranges: []
       skip_network_definition: true
-      subdirs: []
+      subdirs: [ "dynamic" ]
 
 - ansible.builtin.import_role:
     name: compose_hull
@@ -30,7 +30,7 @@
 - name: Copy dynamic config files
   copy:
     src: "{{ item }}"
-    dest: '{{ service_dir }}/rules/{{ item }}'
+    dest: '{{ service_dir }}/dynamic/{{ item }}'
     owner: '{{ admin.name }}'
     group: 'docker'
   tags: [ started, restarted, recreated ]
@@ -41,7 +41,7 @@
 - name: Copy rules/middlewares.yml
   template:
     src: middlewares.yml.j2
-    dest: '{{ service_dir }}/rules/middlewares.yml'
+    dest: '{{ service_dir }}/dynamic/middlewares.yml'
     owner: '{{ admin.name }}'
     group: 'docker'
   tags: [ started, restarted, recreated ]

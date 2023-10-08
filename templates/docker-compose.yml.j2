@@ -17,9 +17,8 @@ services:
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:rw"
       - "{{ service_cfg.directory }}/traefik.yml:/etc/traefik/traefik.yml:ro"
-      - "{{ service_cfg.directory }}/rules:/etc/traefik/dynamic"
+      - "{{ service_cfg.directory }}/dynamic:/etc/traefik/dynamic"
       - "{{ service_cfg.directory }}/acme.json:/etc/traefik/acme/acme.json:rw"
-{#      - "{{ service_cfg.directory }}/logs:/logs"#}
     labels:
       << : *base_labels
     extra_hosts:
