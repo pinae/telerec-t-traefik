@@ -13,7 +13,8 @@
       autoheal: true
       internal_ip_ranges: []
       skip_network_definition: false
-      subdirs: [ "dynamic" ]
+      subdirs:
+        - "dynamic"
 
 - ansible.builtin.import_role:
     name: compose_hull
