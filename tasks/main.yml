@@ -16,23 +16,9 @@
       subdirs:
         - "dynamic"
 
-- name: "Get User ID"
-  command: "sh -c 'getent passwd {{ admin.name }} | cut -d: -f3'"
-  register: command_output
-  tags: [ always, started, restarted, recreated ]
-
-- name: "Store User ID: {{ command_output.stdout }}"
-  set_fact: PUID=command_output.stdout
-  tags: [ always, started, restarted, recreated ]
-
-- name: "Get Goup ID of docker"
-  command: "sh -c 'getent group docker | cut -d: -f3'"
-  register: command_output
-  tags: [ always, started, restarted, recreated ]
-
-- name: "Store Goup ID of docker: {{ command_output.stdout }}"
-  set_fact: PGID=command_output.stdout
-  tags: [ always, started, restarted, recreated ]
+- ansible.builtin.import_role:
+    name: compose_hull
+    tasks_from: user_info
 
 - ansible.builtin.import_role:
     name: compose_hull
