@@ -8,6 +8,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "8080:8080"
     environment:
       PUID: "{{ PUID }}"
       PGID: "{{ PGID }}"
@@ -20,7 +21,9 @@ services:
     labels:
       << : *base_labels
       traefik.http.middlewares.{{ service_cfg.name }}_web-auth.basicauth.users: "{{ service_cfg.http_basic_users }}"
+{#      traefik.http.middlewares.{{ service_cfg.name }}_stripprefix.stripprefix.prefixes: {{ service_cfg.url_path_prefix }}#}
+{#      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ service_cfg.name }}_web-auth,{{ service_cfg.name }}_stripprefix"#}
       traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ service_cfg.name }}_web-auth"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    networks: *base_networks
+    network_mode: host
