@@ -5,14 +5,16 @@ services:
     restart: always
     healthcheck:
       test: "traefik healthcheck"
+      start_period: 20s
+      start_interval: 1s  # make healthchecks more frequent during start_period
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
     environment:
       PUID: "{{ PUID }}"
       PGID: "{{ PGID }}"
       TZ: "{{ timezone }}"
+    network_mode: host
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:rw"
       - "{{ service_cfg.directory }}/traefik.yml:/etc/traefik/traefik.yml:ro"
@@ -21,9 +23,6 @@ services:
     labels:
       << : *base_labels
       traefik.http.middlewares.{{ service_cfg.name }}_web-auth.basicauth.users: "{{ service_cfg.http_basic_users }}"
-{#      traefik.http.middlewares.{{ service_cfg.name }}_stripprefix.stripprefix.prefixes: {{ service_cfg.url_path_prefix }}#}
-{#      traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ service_cfg.name }}_web-auth,{{ service_cfg.name }}_stripprefix"#}
       traefik.http.routers.{{ service_cfg.name }}_web.middlewares: "{{ service_cfg.name }}_web-auth"
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    network_mode: host
